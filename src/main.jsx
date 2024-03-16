@@ -8,6 +8,8 @@ import Register from "./components/auth/register/Register.jsx";
 import Home from "./components/home/Home.jsx";
 import { NextUIProvider } from "@nextui-org/react";
 import { Main } from "./components/dashboard/Main.jsx";
+import PrivateRoute from "./utils/PrivateRoute.jsx";
+import AuthProvider from "./utils/AuthContext.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -24,18 +26,21 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/dashboard",
-		element: <Main />,
+		element: <PrivateRoute />,
+		children: [{ path: "", element: <Main /> }],
 	},
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
-		<RouterProvider router={router}>
-			<NextUIProvider>
-				<main className="light text-foreground bg-background">
-					<App />
-				</main>
-			</NextUIProvider>
-		</RouterProvider>
+		<NextUIProvider>
+			<RouterProvider router={router}>
+				<AuthProvider>
+					<main className="light text-foreground bg-background">
+						<App />
+					</main>
+				</AuthProvider>
+			</RouterProvider>
+		</NextUIProvider>
 	</React.StrictMode>
 );

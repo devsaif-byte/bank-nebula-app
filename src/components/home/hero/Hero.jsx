@@ -28,7 +28,6 @@ export function Hero() {
 				<Button
 					className="relative z-10"
 					color="secondary"
-					showAnchorIcon
 					variant="ghost"
 					radius="none"
 					as={Link}
