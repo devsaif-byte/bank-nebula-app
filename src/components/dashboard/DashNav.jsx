@@ -2,12 +2,16 @@ import { Button, Navbar, NavbarContent } from "@nextui-org/react";
 import React from "react";
 import { Logo } from "../common/Logo";
 import { Link } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 export default function DashNav() {
+	const { user } = useAuth();
 	return (
 		<Navbar shouldHideOnScroll className="py-6 px-3 relative z-10">
 			<NavbarContent>
-				<p className="font-bold text-inherit">John Doe</p>
+				<p className="font-bold text-inherit">
+					{user ? `Active user: ${user.email}` : "No logged in user"}
+				</p>
 			</NavbarContent>
 			<NavbarContent justify="center" className="gap-1">
 				<Logo />

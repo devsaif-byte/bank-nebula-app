@@ -7,29 +7,7 @@ import { useState } from "react";
 import { account } from "../../../lib/appwrite";
 
 export default function Login() {
-	// const { user, loginUser } = useAuth();
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [loading, setLoading] = useState(true);
 	const [user, setUser] = useState(null);
-	const userInfo = { email, password };
-	const navigate = useNavigate();
-	const loginUser = async (userInfo) => {
-		setLoading(true);
-		try {
-			const promise = await account.createEmailSession(
-				userInfo.email,
-				userInfo.password
-			);
-			console.log(promise);
-			setUser(await account.get());
-			navigate("/dashboard");
-		} catch (err) {
-			console.log(err);
-		}
-		setLoading(false);
-	};
-
 	return (
 		<div className="flex items-center justify-center h-screen w-screen">
 			<div className=" w-full relative h-screen">
@@ -48,42 +26,73 @@ export default function Login() {
 						Navigate your cosmic cash with Bank&apos;s top-tier security. your
 						financial spaceship hassle-free—no alien antics allowed!!
 					</p>
-					<form className="flex flex-col min-w-[500px] flex-wrap md:flex-nowrap font-normal text-base text-slate-500 gap-4 mb-4 relative z-50">
-						<Input
-							radius="none"
-							type="email"
-							value={email}
-							label="Email"
-							variant="bordered"
-							onChange={(e) => setEmail(e.target.value)}
-						/>
-						<Input
-							radius="none"
-							type="password"
-							value={password}
-							label="Password"
-							variant="bordered"
-							onChange={(e) => setPassword(e.target.value)}
-						/>
-						<p className="pb-6">
-							Not have account?
-							<Link to="/register"> Register here</Link>
-						</p>
-						<Button
-							onClick={() => loginUser(userInfo)}
-							color="secondary"
-							showAnchorIcon
-							radius="none"
-							type="button"
-						>
-							Login
-						</Button>
-					</form>
 
+					<LoginForm user={user} setUser={setUser} />
 					{/* Meaty part - Meteor effect */}
 					<Meteors number={20} />
 				</div>
 			</div>
 		</div>
+	);
+}
+
+function LoginForm({ user, setUser }) {
+	// const { user, loginUser } = useAuth();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [loading, setLoading] = useState(true);
+
+	const userInfo = { email, password };
+	const navigate = useNavigate();
+	const loginUser = async (userInfo) => {
+		setLoading(true);
+		try {
+			const promise = await account.createEmailSession(
+				userInfo.email,
+				userInfo.password
+			);
+			console.log(promise);
+			const auth_user = await account.get();
+			setUser(auth_user);
+			if (auth_user.email === email || auth_user.password === password) {
+				navigate("/dashboard");
+			} else alert("User not exist! please signUp an account.");
+		} catch (err) {
+			console.log(err);
+		}
+		setLoading(false);
+	};
+	return (
+		<form className="flex flex-col min-w-[500px] flex-wrap md:flex-nowrap font-normal text-base text-slate-500 gap-4 mb-4 relative z-50">
+			<Input
+				radius="none"
+				type="email"
+				value={email}
+				label="Email"
+				variant="bordered"
+				onChange={(e) => setEmail(e.target.value)}
+			/>
+			<Input
+				radius="none"
+				type="password"
+				value={password}
+				label="Password"
+				variant="bordered"
+				onChange={(e) => setPassword(e.target.value)}
+			/>
+			<p className="pb-6">
+				Not have account?
+				<Link to="/register"> Register here</Link>
+			</p>
+			<Button
+				onClick={() => loginUser(userInfo)}
+				color="secondary"
+				showAnchorIcon
+				radius="none"
+				type="button"
+			>
+				Login
+			</Button>
+		</form>
 	);
 }

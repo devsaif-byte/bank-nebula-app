@@ -1,24 +1,32 @@
 import * as React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
 import "./index.css";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import App from "./App.jsx";
+import ReactDOM from "react-dom/client";
+import Home from "./components/home/Home.jsx";
 import Login from "./components/auth/login/Login.jsx";
 import Register from "./components/auth/register/Register.jsx";
-import Home from "./components/home/Home.jsx";
-import { NextUIProvider } from "@nextui-org/react";
+import PrivateRoute from "./components/shared/PrivateRoute.jsx";
 import { Main } from "./components/dashboard/Main.jsx";
-import PrivateRoute from "./utils/PrivateRoute.jsx";
-import AuthProvider from "./utils/AuthContext.jsx";
+import { NextUIProvider } from "@nextui-org/react";
+import { AuthProvider } from "./components/shared/AuthDataContext.jsx";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
 	{
 		path: "/register",
-		element: <Register />,
+		element: (
+			<AuthProvider>
+				<Register />
+			</AuthProvider>
+		),
 	},
 	{
 		path: "/login",
-		element: <Login />,
+		element: (
+			<AuthProvider>
+				<Login />
+			</AuthProvider>
+		),
 	},
 	{
 		path: "/",
@@ -26,21 +34,34 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/dashboard",
-		element: <PrivateRoute />,
-		children: [{ path: "", element: <Main /> }],
+		element: (
+			<AuthProvider>
+				<PrivateRoute />
+			</AuthProvider>
+		),
+		children: [
+			{
+				path: "",
+				element: (
+					<AuthProvider>
+						<Main />
+					</AuthProvider>
+				),
+			},
+		],
 	},
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
-		<NextUIProvider>
-			<RouterProvider router={router}>
-				<AuthProvider>
+		<RouterProvider router={router}>
+			<AuthProvider>
+				<NextUIProvider>
 					<main className="light text-foreground bg-background">
 						<App />
 					</main>
-				</AuthProvider>
-			</RouterProvider>
-		</NextUIProvider>
+				</NextUIProvider>
+			</AuthProvider>
+		</RouterProvider>
 	</React.StrictMode>
 );

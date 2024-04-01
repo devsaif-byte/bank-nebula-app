@@ -1,10 +1,7 @@
-import React from "react";
 import { Outlet, Navigate } from "react-router-dom";
-import { useAuth } from "./UseAuth";
-import { account } from "../lib/appwrite";
+import useAuth from "../../hooks/useAuth";
 export default function PrivateRoute() {
 	// const { user } = useAuth();
-	const user = account.get();
-	console.log(user);
+	const user = true;
 	return user ? <Outlet /> : <Navigate to="/login" />;
 }

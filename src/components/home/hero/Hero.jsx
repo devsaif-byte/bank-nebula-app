@@ -1,4 +1,3 @@
-import React from "react";
 import { BackgroundBeams } from "../../ui/background-beams";
 import { Button } from "@nextui-org/react";
 import Nav from "../nav/Nav";
