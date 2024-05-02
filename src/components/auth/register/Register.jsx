@@ -5,8 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ID, account } from "../../../lib/appwrite";
 import { creteUser } from "../../../services/apiUser";
-import { toast, Flip } from "react-toastify";
-
+import { toast } from "react-toastify";
 export default function Register() {
 	return (
 		<div className="flex items-center justify-center h-screen w-screen">
@@ -53,27 +52,17 @@ function SignUpForm() {
 			await creteUser({ user_mail: userInfo.email, password });
 			const auth_user = await account.get();
 			setUser(auth_user);
-			if (auth_user)
-				toast.success("Registration successful!", {
-					position: "top-center",
-					autoClose: 1200,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-					theme: "light",
-					transition: Flip,
-				});
 			navigate("/login");
+			if (auth_user) toast.success("Registration successful!");
 		} catch (err) {
 			console.log(err);
+			toast.error(err);
 		}
 		setLoading(false);
 	};
 
 	return (
-		<form className="flex flex-col min-w-[500px] flex-wrap md:flex-nowrap font-normal text-base text-slate-500 gap-4 mb-4 relative z-50">
+		<form className="flex flex-col w-full md:max-w-[500px] flex-wrap md:flex-nowrap font-normal text-base text-slate-500 gap-4 mb-4 relative z-50">
 			<Input
 				radius="none"
 				type="email"

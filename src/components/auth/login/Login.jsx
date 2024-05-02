@@ -3,8 +3,8 @@ import { Logo } from "../../common/Logo";
 import { Meteors } from "../../ui/meteors";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-// import { useAuth } from "../../../utils/UseAuth";
 import { account } from "../../../lib/appwrite";
+import { toast } from "react-toastify";
 
 export default function Login() {
 	const [user, setUser] = useState(null);
@@ -12,7 +12,7 @@ export default function Login() {
 		<div className="flex items-center justify-center h-screen w-screen">
 			<div className=" w-full relative h-screen">
 				<div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] bg-red-500 rounded-full blur-3xl" />
-				<div className="relative shadow-xl bg-gray-900 border border-gray-800  px-4 py-8 h-full overflow-hidden rounded-sm flex flex-col justify-center items-center">
+				<div className="relative shadow-xl bg-gray-900 border border-gray-800 px-4 py-8 h-full overflow-hidden rounded-sm flex flex-col justify-center items-center">
 					<div className="h-14 w-14 rounded-full border flex items-center justify-center mb-4 border-gray-500">
 						<Logo />
 					</div>
@@ -47,23 +47,27 @@ function LoginForm({ user, setUser }) {
 	const loginUser = async (userInfo) => {
 		setLoading(true);
 		try {
+			// logout the session before creating new session
 			const promise = await account.createEmailSession(
 				userInfo.email,
 				userInfo.password
 			);
 			console.log(promise);
 			const auth_user = await account.get();
+
 			setUser(auth_user);
 			if (auth_user.email === email || auth_user.password === password) {
 				navigate("/dashboard");
+				toast.success("Login Successful!");
 			} else alert("User not exist! please signUp an account.");
 		} catch (err) {
 			console.log(err);
+			toast.error(err);
 		}
 		setLoading(false);
 	};
 	return (
-		<form className="flex flex-col min-w-[500px] flex-wrap md:flex-nowrap font-normal text-base text-slate-500 gap-4 mb-4 relative z-50">
+		<form className="flex flex-col w-full md:max-w-[500px] flex-wrap md:flex-nowrap font-normal text-base text-slate-500 gap-4 mb-4 relative z-50">
 			<Input
 				radius="none"
 				type="email"

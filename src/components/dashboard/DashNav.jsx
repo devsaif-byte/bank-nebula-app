@@ -1,11 +1,11 @@
 import { Button, Navbar, NavbarContent } from "@nextui-org/react";
-import React from "react";
 import { Logo } from "../common/Logo";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
 export default function DashNav() {
-	const { user } = useAuth();
+	const { user, logoutUser } = useAuth();
+
 	return (
 		<Navbar shouldHideOnScroll className="py-6 px-3 relative z-10">
 			<NavbarContent>
@@ -28,6 +28,7 @@ export default function DashNav() {
 					variant="bordered"
 					radius="none"
 					className="font-bold text-inherit"
+					onClick={logoutUser}
 				>
 					Logout
 				</Button>

@@ -19,7 +19,10 @@ export default function MovementsCard() {
 							key={item}
 							className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500 w-full p-3 flex flex-wrap justify-between bg-neutral-50 bg-opacity-5 border-b border-opacity-5"
 						>
-							<Chip color={item > 0 ? "success" : "danger"} variant="shadow">
+							<Chip
+								color={Number(item) > 0 ? "success" : "danger"}
+								variant="shadow"
+							>
 								{item > 0 ? "deposit" : "withdrawal"}
 							</Chip>
 							<div>{formatMovementDate(databaseUser?.$updatedAt)}</div>
