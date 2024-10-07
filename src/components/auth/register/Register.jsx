@@ -54,6 +54,8 @@ function SignUpForm() {
 			setUser(auth_user);
 			navigate("/login");
 			if (auth_user) toast.success("Registration successful!");
+			const deleteRegisterSession = await account.deleteSessions();
+			console.log(deleteRegisterSession)
 		} catch (err) {
 			console.log(err);
 			toast.error(err);
